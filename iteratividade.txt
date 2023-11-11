@@ -1,0 +1,4 @@
+Número: 4
+Tempo de cálculo para números naturais com iteratividade : -2 ticks de clock - Tempo tomado: 0.000000
+Tempo de cálculo para fatorial com iteratividade : 0 ticks de clock - Tempo tomado: 0.000000
+Tempo de cálculo para sequência de Fibonacci com iteratividade: 0 ticks de clock - Tempo tomado: 0.000000
