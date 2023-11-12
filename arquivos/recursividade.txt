@@ -1,0 +1,11 @@
+Número: 4
+Resultado Naturais: 10
+Resultado Fatorial: 24
+Resultado Fibonacci:
+0
+1
+1
+2
+Tempo de cálculo para números naturais com recursividade : 0 ticks de clock - Tempo tomado: 0.000000
+Tempo de cálculo para fatorial com recursividade : 0 ticks de clock - Tempo tomado: 0.000000
+Tempo de cálculo para sequência de Fibonacci com recursividade : 0 ticks de clock - Tempo tomado: 0.000000

@@ -1,7 +1,15 @@
 #include "algoritmos.h"
 
 int* geraVetorAleatorio1(int extent) {
-    int keySearch = -1;
+    int keySearch = -1, i;
+
+    FILE *file = fopen("busca.txt", "w");
+
+    if (file == NULL) {
+        printf("Erro na abertura de arquivo.\n");
+        exit(1);
+    }
+
     int* array = (int*)malloc(extent * sizeof(int)); 
     if (array == NULL) {
         printf("Erro ao alocar memória para o vetor.\n");
@@ -11,15 +19,52 @@ int* geraVetorAleatorio1(int extent) {
     printf("Elementos gerados: ");
     for (int i = 0; i < extent; i++) {
         array[i] = rand() % 1000;
+        fprintf(file, "%d\t ", array[i]);
         printf("%d ", array[i]);
     }
+    fprintf(file, "\n");
+    /*Fechar o arquivo*/
+    fclose(file);
+
     printf("\n");    
     
     recebeKeySearch(array, extent, keySearch);    /*Chamada da função para receber a chave de busca*/
 
     return array; 
+}
 
 
+void lerElementosDoArquivo1(const char *fp, int **array, int *extent) {
+
+    FILE *file = fopen(fp, "r");
+    
+    if (file == NULL) {
+        perror("Erro na abertura de arquivo");
+        exit(EXIT_FAILURE);
+    }
+
+    int num;
+    int size = 0;
+
+    while (fscanf(file, "%d", &num) == 1) {
+        size++;
+    }
+
+    *array = (int *)malloc(size * sizeof(int));
+    if (*array == NULL) {
+        perror("Erro ao alocar memória para o vetor");
+        exit(EXIT_FAILURE);
+    }
+
+    // Volta ao início do arquivo
+    fseek(file, 0, SEEK_SET);
+
+    for (int i = 0; i < size; i++) {
+        fscanf(file, "%d", &(*array)[i]);
+    }
+
+    *extent = size;
+    fclose(file);
 }
 
 /*Função para receber a chave de busca*/
@@ -33,6 +78,9 @@ void recebeKeySearch(int *array, int extent, int keySearch){
 
     printf("Tudo ok! Agora o digite o elemento que desejas buscar:\n");
     scanf("%d", &keySearch);
+
+    lerElementosDoArquivo1("busca.txt", &array, &extent);
+
 
     /*Chamadas das funções*/
     buscaLinear(array, extent, keySearch, &posicoes, &contadorPosicoes);
@@ -55,52 +103,41 @@ void recebeKeySearch(int *array, int extent, int keySearch){
 }
 
 void geraResultadosBusca(int *array, int extent, int keySearch) {
-    FILE *file = fopen("busca.txt", "w+");
-
-    if (file == NULL) {
-        printf("Erro na abertura de arquivo.\n");
-        exit(1);
-    }
+    
+    int contadorPosicoes = 0, *posicoes = NULL;
 
     clock_t inicio, fim;
-    int i, contadorPosicoes = 0, *posicoes = NULL;
-
-    fprintf(file, "Elementos gerados: ");
-    for (i = 0; i < extent; i++) {
-        fprintf(file, "%d\t ", array[i]);
-    }
-    fprintf(file, "\n");
-
+    
     inicio = clock();
     int resultadoLinear = buscaLinear(array, extent, keySearch, &posicoes, &contadorPosicoes);
     fim = clock();
-    fprintf(file, "Tempo de Busca Linear para n=%d: %d ticks de clock - Tempo tomado: %f\n", extent, (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
+    printf("Tempo de Busca Linear para n=%d: %d ticks de clock - Tempo tomado: %f\n", extent, (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 
     inicio = clock();
     int resultadoSentinela = buscaLinearComSentinela(array, extent, keySearch);
     fim = clock();
-    fprintf(file, "Tempo de Busca Linear com Sentinela para n=%d: %d ticks de clock - Tempo tomado: %f\n", extent, (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
+    printf("Tempo de Busca Linear com Sentinela para n=%d: %d ticks de clock - Tempo tomado: %f\n", extent, (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 
     inicio = clock();
     int resultadoBinaria = buscaBinaria(array, extent, keySearch);
     fim = clock();
-    fprintf(file, "Tempo de Busca Binária para n=%d: %d ticks de clock - Tempo tomado: %f\n", extent, (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
+    printf("Tempo de Busca Binária para n=%d: %d ticks de clock - Tempo tomado: %f\n", extent, (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 
     if (contadorPosicoes > 0) {
-        fprintf(file, "Elemento encontrado na(s) posição(ões):");
-        for (i = 0; i < contadorPosicoes; i++) {
-            fprintf(file, "%d\t", posicoes[i]);
+        printf("Elemento encontrado na(s) posição(ões):");
+        for (int i = 0; i < contadorPosicoes; i++) {
+            printf("%d\t", posicoes[i]);
         }
-        fprintf(file, "\n");
+        printf("\n");
     }
     else {
-        fprintf(file, "Elemento não encontrado.\n");
-    }
+        printf("Elemento não encontrado.\n");
+    }  
+   
 
     free(posicoes);
 
-    /*Fechar o arquivo*/
-    fclose(file);
+    
 }
 
 

@@ -62,6 +62,7 @@ void geraResultadoIterativo(int numero) {
     
     inicio = clock();
     int resultadoNaturais = calculaNaturais(numero);
+    fim = clock();
     printf("Tempo de cálculo para números naturais com iteratividade : %d ticks de clock - Tempo tomado: %f\n", (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
     fim = clock();
 
@@ -87,10 +88,18 @@ void geraResultadoIterativo(int numero) {
         printf("%d\n", numerosFibonacci[i]);
     }
 
-    
     fprintf(fp, "Número: %d\n", numero);
+    fprintf(fp, "Resultado Naturais: %d\n", resultadoNaturais);
+    fprintf(fp, "Resultado Fatorial: %d\n", resultadoFatorial);
+    fprintf(fp, "Resultado Fibonacci:\n");
+    
+    for (int i = 0; i < numero; i++) {
+        fprintf(fp, "%d\n", numerosFibonacci[i]);
+    }
+    
     inicio = clock();
     resultadoNaturais = calculaNaturais(numero);
+    fim = clock();
     fprintf(fp, "Tempo de cálculo para números naturais com iteratividade : %d ticks de clock - Tempo tomado: %f\n", (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 
     inicio = clock();
@@ -99,7 +108,7 @@ void geraResultadoIterativo(int numero) {
     fprintf(fp, "Tempo de cálculo para fatorial com iteratividade : %d ticks de clock - Tempo tomado: %f\n", (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 
     inicio = clock();
-    *resultadoFibonacci = calculaFibonacci(numero);
+    resultadoFibonacci = calculaFibonacci(numero);
     fim = clock();
     fprintf(fp, "Tempo de cálculo para sequência de Fibonacci com iteratividade: %d ticks de clock - Tempo tomado: %f\n", (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 

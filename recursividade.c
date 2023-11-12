@@ -15,7 +15,8 @@ int determinaNaturais(int numero) {
     int soma = 0;
     if (numero == 1) {
         soma = 1;
-    } else {
+    } 
+    else {
         soma = numero + determinaNaturais(numero - 1);
     }
     return soma;
@@ -25,7 +26,8 @@ int determinaFatorial(int numero) {
     int fatorial = 1;
     if (numero == 0 || numero == 1) {
         fatorial = 1;
-    } else {
+    }
+    else {
         fatorial = numero * determinaFatorial(numero - 1);
     }
     return fatorial;
@@ -45,7 +47,8 @@ int *determinaFibonacci(int numero) {
     for (int i = 0; i < numero; i++) {
         if (i <= 1) {
             fibonacci[i] = i;
-        } else {
+        }
+        else {
             fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
         }
     }
@@ -54,17 +57,7 @@ int *determinaFibonacci(int numero) {
 }
 
 void geraResultadoRecursivo(int numero) {
-    FILE *fp;
-    fp = fopen("recursividade.txt", "w+");
-
-    if (fp == NULL) {
-        printf("Erro na abertura de arquivo.\n");
-        exit(1);
-    }
-    
-    
-    fprintf(fp, "Número: %d\n", numero);
-
+  
     clock_t inicio, fim;
 
     inicio = clock();
@@ -91,6 +84,16 @@ void geraResultadoRecursivo(int numero) {
     }
     printf("\n");
     
+    FILE *fp;
+    fp = fopen("recursividade.txt", "w");
+
+    if (fp == NULL) {
+        printf("Erro na abertura de arquivo.\n");
+        exit(1);
+    }
+    
+    
+    fprintf(fp, "Número: %d\n", numero);
     fprintf(fp, "Resultado Naturais: %d\n", resultadoNaturais);
     fprintf(fp, "Resultado Fatorial: %d\n", resultadoFatorial);
     fprintf(fp, "Resultado Fibonacci:\n");
@@ -99,14 +102,18 @@ void geraResultadoRecursivo(int numero) {
     }
 
     inicio = clock();
+    resultadoNaturais = determinaNaturais(numero);
     fim = clock();
     fprintf(fp, "Tempo de cálculo para números naturais com recursividade : %d ticks de clock - Tempo tomado: %f\n", (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 
     inicio = clock();
+    resultadoFatorial = determinaFatorial(numero);
     fim = clock();
     fprintf(fp, "Tempo de cálculo para fatorial com recursividade : %d ticks de clock - Tempo tomado: %f\n", (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 
     inicio = clock();
+    numerosFibonacci = determinaFibonacci(numero);
+    resultadoFibonacci = numerosFibonacci[numero - 1];
     fim = clock();
     fprintf(fp, "Tempo de cálculo para sequência de Fibonacci com recursividade : %d ticks de clock - Tempo tomado: %f\n", (int)(fim - inicio), (double)((fim - inicio) / CLOCKS_PER_SEC));
 

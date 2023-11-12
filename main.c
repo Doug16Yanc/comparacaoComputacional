@@ -44,3 +44,5 @@ int main(void) {
     }
     return 0;
 }
+
+/*Sinto-me um relojoeiro suiço com tantos ponteiros*/

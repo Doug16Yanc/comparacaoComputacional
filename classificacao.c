@@ -6,64 +6,105 @@ int* geraVetorAleatorio2(int extent) {
         printf("Erro ao alocar memória para o vetor.\n");
         return NULL;  
     }
-
-    printf("Elementos gerados: ");
-    for (int i = 0; i < extent; i++) {
-        array[i] = rand() % 1000;
-        printf("%d ", array[i]);
-    }
-    printf("\n");
     
-    geraResultadosOrdenacao(array, extent);
-    return array; 
-
-   
-}
-void geraResultadosOrdenacao(int *array, int extent) {
-    FILE *file = fopen("classificacao.txt", "w+");
+    int *tempArray = (int*)malloc(extent * sizeof(int));
+    
+    if (tempArray == NULL){
+        printf("Erro na alocação de memória.\n");
+        exit(1);
+    }
+    
+    FILE *file = fopen("classificacao.txt", "w");
 
     if (file == NULL) {
         printf("Erro na abertura de arquivo.\n");
         exit(1);
     }
 
-    int *tempArray = (int *)malloc(extent * sizeof(int));
-
-    fprintf(file, "Elementos gerados: ");
+    printf("Elementos gerados: ");
     for (int i = 0; i < extent; i++) {
+        array[i] = rand() % 1000;
         tempArray[i] = array[i];
         fprintf(file, "%d\t", tempArray[i]);
+        printf("%d ", array[i]);
     }
     fprintf(file, "\n");
+    fclose(file);
+
+    printf("\n");
+    
+    geraResultadosOrdenacao(array, extent);
+    return array; 
+}
+
+void lerElementosDoArquivoOrdenacao2(const char *fp, int **array, int *extent) {
+    FILE *file = fopen(fp, "r");
+    if (file == NULL) {
+        perror("Erro na abertura de arquivo");
+        exit(EXIT_FAILURE);
+    }
+
+    int num;
+    int size = 0;
+
+    // Conta a quantidade de números no arquivo
+    while (fscanf(file, "%d", &num) == 1) {
+        size++;
+    }
+
+    // Aloca memória para o array
+    *array = (int *)malloc(size * sizeof(int));
+    if (*array == NULL) {
+        perror("Erro ao alocar memória para o vetor");
+        exit(EXIT_FAILURE);
+    }
+
+    // Volta ao início do arquivo
+    fseek(file, 0, SEEK_SET);
+
+    // Lê os números do arquivo e os armazena no array
+    for (int i = 0; i < size; i++) {
+        fscanf(file, "%d", &(*array)[i]);
+    }
+
+    *extent = size; // Atualiza a quantidade de elementos no vetor
+    fclose(file);
+}
+void geraResultadosOrdenacao(int *array, int extent) {
+   
+    int *tempArray = (int *)malloc(extent * sizeof(int));
 
     clock_t inicio, fim;
+
+    lerElementosDoArquivoOrdenacao2("classificacao.txt", &tempArray, &extent);
+
 
     inicio = clock();
     insertionSort(tempArray, extent);
     fim = clock();
-    fprintf(file, "Tempo de classificação para Insertion Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
+    printf("Tempo de classificação para Insertion Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
 
     inicio = clock();
     selectionSort(tempArray, extent);
     fim = clock();
-    fprintf(file, "Tempo de classificação para Selection Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
+    printf("Tempo de classificação para Selection Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
 
     inicio = clock();
     bubbleSort(tempArray, extent);
     fim = clock();
-    fprintf(file, "Tempo de classificação para Bubble Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
+    printf("Tempo de classificação para Bubble Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
 
     inicio = clock();
     quickSort(tempArray, 0, extent - 1);
     fim = clock();
-    fprintf(file, "Tempo de classificação para Quick Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
+    printf("Tempo de classificação para Quick Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
 
     inicio = clock();
     mergeSort(tempArray, 0, extent - 1);
     fim = clock();
-    fprintf(file, "Tempo de classificação para Merge Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
+    printf("Tempo de classificação para Merge Sort com n=%d: %ld ticks de clock - Tempo tomado: %f segundos\n", extent, (long)(fim - inicio), ((double)(fim - inicio)) / CLOCKS_PER_SEC);
 
-    fclose(file);
+    
     free(tempArray);
     system("PAUSE");
 }
