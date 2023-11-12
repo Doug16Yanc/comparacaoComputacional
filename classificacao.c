@@ -47,27 +47,23 @@ void lerElementosDoArquivoOrdenacao2(const char *fp, int **array, int *extent) {
     int num;
     int size = 0;
 
-    // Conta a quantidade de números no arquivo
     while (fscanf(file, "%d", &num) == 1) {
         size++;
     }
 
-    // Aloca memória para o array
     *array = (int *)malloc(size * sizeof(int));
     if (*array == NULL) {
         perror("Erro ao alocar memória para o vetor");
         exit(EXIT_FAILURE);
     }
 
-    // Volta ao início do arquivo
     fseek(file, 0, SEEK_SET);
 
-    // Lê os números do arquivo e os armazena no array
     for (int i = 0; i < size; i++) {
         fscanf(file, "%d", &(*array)[i]);
     }
 
-    *extent = size; // Atualiza a quantidade de elementos no vetor
+    *extent = size; 
     fclose(file);
 }
 void geraResultadosOrdenacao(int *array, int extent) {

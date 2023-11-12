@@ -1,6 +1,6 @@
 #include "algoritmos.h"
 
-
+/*De fato, não realizei tantos comentários dessa vez, é o cansaço, chefe!*/
 void geraIteratividade(){
     int numero;
     printf("-------------------------------------------------------------------------------------------------------\n");
@@ -12,7 +12,6 @@ void geraIteratividade(){
     geraResultadoIterativo(numero);
 
 }
-
 
 
 int calculaNaturais(int numero){
